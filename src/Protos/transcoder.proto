@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+service TranscoderService {
+  rpc UploadFile(FileUploadRequest) returns (FileUploadResponse);
+}
+
+message FileUploadRequest {
+  string tutorId = 1;    // Unique job identifier
+  bytes file = 3;  // File content as binary data
+}
+
+message FileUploadResponse {
+  string status = 1;    // Success or failure
+  string message = 2;   // Additional information
+}

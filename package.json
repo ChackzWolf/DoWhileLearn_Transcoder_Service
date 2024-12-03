@@ -3,19 +3,17 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "build": "npx tsc ",
-    "prestart": "npm run build",
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts"
+    "start": "ts-node src/server.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.567.0",
+    "@aws-sdk/client-s3": "^3.567.0", 
     "@aws-sdk/s3-request-presigner": "^3.567.0",
-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0", 
     "@ffprobe-installer/ffprobe": "^2.1.2",
+    "@grpc/grpc-js": "^1.12.2",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -43,12 +41,14 @@
     "hls.js": "^1.5.8",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodejs-whisper": "^0.1.13",
     "path": "^0.12.7",
     "rimraf": "^5.0.5",
     "sdk": "^0.5.0",
     "shelljs": "^0.8.5",
+    "which": "^5.0.0",
     "whisper-node-ts": "^0.0.16"
   },
   "devDependencies": {

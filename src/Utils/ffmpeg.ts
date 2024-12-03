@@ -4,11 +4,11 @@ import * as path from "path";
 import ffmpeg from "fluent-ffmpeg";
 import crypto from "crypto";
 
-ffmpeg.setFfmpegPath("/usr/local/bin/ffmpeg");
+// ffmpeg.setFfmpegPath("/usr/local/bin/ffmpeg");
 
 // in windows use this commented path . make sure the ffmpeg installed in our system . and also configure path in environment variables
-// ffmpeg.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe");
-
+ffmpeg.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe");
+// ffmpeg.setFfmpegPath("C:\\ffmpeg\\ffmpeg-master-latest-win64-gpl");
 
 export const FFmpegTranscoder = async (file: any): Promise<any> => {
   try {
@@ -21,7 +21,9 @@ export const FFmpegTranscoder = async (file: any): Promise<any> => {
     if (!fs.existsSync(directoryPath)) {
       fs.mkdirSync(directoryPath, { recursive: true });
     }
-
+    console.log('ffmpegTranscoder function')
+    console.log(filePath, 'filePath');
+    console.log(file, 'file');
     const paths = await new Promise<any>((resolve, reject) => {
       fs.writeFile(filePath, file, async (err) => {
         if (err) {
@@ -30,11 +32,12 @@ export const FFmpegTranscoder = async (file: any): Promise<any> => {
         }
         console.log("File saved successfully:", filePath);
 
-        try {
+        try { 
           const outputDirectoryPath = await transcodeWithFFmpeg(
             fileName,
             filePath
           );
+          console.log(outputDirectoryPath, 'outputDirecotry path')
           resolve({ directoryPath, filePath, fileName, outputDirectoryPath });
         } catch (error) {
           console.error("Error transcoding with FFmpeg:", error);
@@ -48,12 +51,10 @@ export const FFmpegTranscoder = async (file: any): Promise<any> => {
 };
 
 const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
-  const directoryPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    `output/hls/${fileName}`
-  );
+  console.log('transcodeWithFFmpeg')
+  console.log('fileNamea; ', fileName);
+  console.log('filePath', filePath);
+  const directoryPath = path.join( __dirname,"..", "..",`output/hls/${fileName}`);
 
   if (!fs.existsSync(directoryPath)) {
     fs.mkdirSync(directoryPath, { recursive: true });
@@ -83,19 +84,20 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
   ];
 
   const variantPlaylists: { resolution: string; outputFileName: string }[] = [];
-
+  console.log(resolutions)
   for (const { resolution, videoBitrate, audioBitrate } of resolutions) {
     console.log(`HLS conversion starting for ${resolution}`);
     const outputFileName = `${fileName}_${resolution}.m3u8`;
     const segmentFileName = `${fileName}_${resolution}_%03d.ts`;
 
     try {
+      console.log('filePath:', filePath)
       await new Promise<void>((resolve, reject) => {
         ffmpeg(filePath)
           .outputOptions([
-            `-c:v h264`,
-            `-b:v ${videoBitrate}`,
-            `-c:a aac`,
+            `-c:v h264`, // video codec
+            `-b:v ${videoBitrate}`, 
+            `-c:a aac`, // audio codec
             `-b:a ${audioBitrate}`,
             `-vf scale=${resolution}`,
           ])
@@ -103,10 +105,10 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
             "-profile:v baseline",
             "-level 3.0",
             "-start_number 0",
-            "-hls_time 4",
+            "-hls_time 4",// partition 4 seconds 15 parts
             "-hls_list_size 0",
             "-master_pl_name master.m3u8",
-          ])
+          ])// check out
           .output(`${directoryPath}/${outputFileName}`)
           .on("end", (stdout, stderr) => {
             console.log(stdout);

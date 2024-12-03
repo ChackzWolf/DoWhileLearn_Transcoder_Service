@@ -1,0 +1,73 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.statusCode = void 0;
+var statusCode;
+(function (statusCode) {
+    // Informational responses (100–199)
+    statusCode[statusCode["Continue"] = 100] = "Continue";
+    statusCode[statusCode["SwitchingProtocols"] = 101] = "SwitchingProtocols";
+    statusCode[statusCode["Processing"] = 102] = "Processing";
+    statusCode[statusCode["EarlyHints"] = 103] = "EarlyHints";
+    // Successful responses (200–299)
+    statusCode[statusCode["OK"] = 200] = "OK";
+    statusCode[statusCode["Created"] = 201] = "Created";
+    statusCode[statusCode["Accepted"] = 202] = "Accepted";
+    statusCode[statusCode["NonAuthoritativeInformation"] = 203] = "NonAuthoritativeInformation";
+    statusCode[statusCode["NoContent"] = 204] = "NoContent";
+    statusCode[statusCode["ResetContent"] = 205] = "ResetContent";
+    statusCode[statusCode["PartialContent"] = 206] = "PartialContent";
+    statusCode[statusCode["MultiStatus"] = 207] = "MultiStatus";
+    statusCode[statusCode["AlreadyReported"] = 208] = "AlreadyReported";
+    statusCode[statusCode["IMUsed"] = 226] = "IMUsed";
+    // Redirection messages (300–399)
+    statusCode[statusCode["MultipleChoices"] = 300] = "MultipleChoices";
+    statusCode[statusCode["MovedPermanently"] = 301] = "MovedPermanently";
+    statusCode[statusCode["Found"] = 302] = "Found";
+    statusCode[statusCode["SeeOther"] = 303] = "SeeOther";
+    statusCode[statusCode["NotModified"] = 304] = "NotModified";
+    statusCode[statusCode["UseProxy"] = 305] = "UseProxy";
+    statusCode[statusCode["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+    statusCode[statusCode["PermanentRedirect"] = 308] = "PermanentRedirect";
+    // Client error responses (400–499)
+    statusCode[statusCode["BadRequest"] = 400] = "BadRequest";
+    statusCode[statusCode["Unauthorized"] = 401] = "Unauthorized";
+    statusCode[statusCode["PaymentRequired"] = 402] = "PaymentRequired";
+    statusCode[statusCode["Forbidden"] = 403] = "Forbidden";
+    statusCode[statusCode["NotFound"] = 404] = "NotFound";
+    statusCode[statusCode["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+    statusCode[statusCode["NotAcceptable"] = 406] = "NotAcceptable";
+    statusCode[statusCode["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+    statusCode[statusCode["RequestTimeout"] = 408] = "RequestTimeout";
+    statusCode[statusCode["Conflict"] = 409] = "Conflict";
+    statusCode[statusCode["Gone"] = 410] = "Gone";
+    statusCode[statusCode["LengthRequired"] = 411] = "LengthRequired";
+    statusCode[statusCode["PreconditionFailed"] = 412] = "PreconditionFailed";
+    statusCode[statusCode["PayloadTooLarge"] = 413] = "PayloadTooLarge";
+    statusCode[statusCode["URITooLong"] = 414] = "URITooLong";
+    statusCode[statusCode["UnsupportedMediaType"] = 415] = "UnsupportedMediaType";
+    statusCode[statusCode["RangeNotSatisfiable"] = 416] = "RangeNotSatisfiable";
+    statusCode[statusCode["ExpectationFailed"] = 417] = "ExpectationFailed";
+    statusCode[statusCode["ImATeapot"] = 418] = "ImATeapot";
+    statusCode[statusCode["MisdirectedRequest"] = 421] = "MisdirectedRequest";
+    statusCode[statusCode["UnprocessableEntity"] = 422] = "UnprocessableEntity";
+    statusCode[statusCode["Locked"] = 423] = "Locked";
+    statusCode[statusCode["FailedDependency"] = 424] = "FailedDependency";
+    statusCode[statusCode["TooEarly"] = 425] = "TooEarly";
+    statusCode[statusCode["UpgradeRequired"] = 426] = "UpgradeRequired";
+    statusCode[statusCode["PreconditionRequired"] = 428] = "PreconditionRequired";
+    statusCode[statusCode["TooManyRequests"] = 429] = "TooManyRequests";
+    statusCode[statusCode["RequestHeaderFieldsTooLarge"] = 431] = "RequestHeaderFieldsTooLarge";
+    statusCode[statusCode["UnavailableForLegalReasons"] = 451] = "UnavailableForLegalReasons";
+    // Server error responses (500–599)
+    statusCode[statusCode["InternalServerError"] = 500] = "InternalServerError";
+    statusCode[statusCode["NotImplemented"] = 501] = "NotImplemented";
+    statusCode[statusCode["BadGateway"] = 502] = "BadGateway";
+    statusCode[statusCode["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+    statusCode[statusCode["GatewayTimeout"] = 504] = "GatewayTimeout";
+    statusCode[statusCode["HTTPVersionNotSupported"] = 505] = "HTTPVersionNotSupported";
+    statusCode[statusCode["VariantAlsoNegotiates"] = 506] = "VariantAlsoNegotiates";
+    statusCode[statusCode["InsufficientStorage"] = 507] = "InsufficientStorage";
+    statusCode[statusCode["LoopDetected"] = 508] = "LoopDetected";
+    statusCode[statusCode["NotExtended"] = 510] = "NotExtended";
+    statusCode[statusCode["NetworkAuthenticationRequired"] = 511] = "NetworkAuthenticationRequired";
+})(statusCode || (exports.statusCode = statusCode = {}));
