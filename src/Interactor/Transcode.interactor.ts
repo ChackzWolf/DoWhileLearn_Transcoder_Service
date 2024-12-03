@@ -7,6 +7,7 @@ import { S3Params } from "../Interface/Custom";
 import fs from "fs";
 import {  PutObjectCommand } from "@aws-sdk/client-s3";
 import { rimraf } from "rimraf";
+import { configs } from "../Configs/Env_configs/ENV.configs";
 // import { convertToWav } from "../utils/convert-to-wav";
 // import { transcriberNode } from "../utils/node-whisper";
 // import {statusCode} from "asif-status-codes-package"
@@ -20,10 +21,7 @@ export class TranscodeInteractor implements ITranscodeInteractor {
 
   async addFileDetails(fileName: string, instructorId: string): Promise<any> {
     try {
-      const response = await this.repository.addFileDetails(
-        fileName,
-        instructorId
-      );
+      const response = await this.repository.addFileDetails(fileName, instructorId );
       return response;
     } catch (e: any) {
       console.log(e);
@@ -32,6 +30,8 @@ export class TranscodeInteractor implements ITranscodeInteractor {
 
   async transcodeMedia(file: File, id: string) {
     try {
+      console.log('troancodeMedia')
+      console.log('file: ', file, "Id:" , id);
       const { filePath, fileName, outputDirectoryPath, directoryPath , status} =  await FFmpegTranscoder(file);
       if(outputDirectoryPath===false){
         
@@ -50,25 +50,27 @@ export class TranscodeInteractor implements ITranscodeInteractor {
       await this.repository.updateStatus(id, Status.finishing, {});
 
       const files = fs.readdirSync(outputDirectoryPath);
+      console.log('files: ', files, 'files')
       for (const file of files) {
+        console.log(file, 'filename loop started')
         const filePaths = `${outputDirectoryPath}/${file}`;
         const fileStream = fs.createReadStream(filePaths);
+
+        console.log(filePath, 'filePath');
+
         const params: S3Params = {
           Bucket: process.env.BUCKET_NAME || "",
-          Key: `media/hls/${fileName}/${file}`,
+          Key: `${fileName}/${file}`,
           Body: fileStream,
-          ContentType: file.endsWith(".ts")
-            ? "video/mp2t"
-            : file.endsWith(".m3u8")
-            ? "application/x-mpegURL"
-            : null,
+          ContentType: file.endsWith(".ts") ? "video/mp2t" : file.endsWith(".m3u8") ? "application/x-mpegURL" : null,
         };
         try {
           const command = new PutObjectCommand(params);
           const rslt = await s3.send(command);
+          
           // fs.unlinkSync(filePaths);
         } catch (err) {
-          throw new Error("s3 error");
+          throw new Error(`s3 error ${err}`);
         }
       }
 
@@ -91,14 +93,15 @@ export class TranscodeInteractor implements ITranscodeInteractor {
       rimraf.sync(outputDirectoryPath);
       // fs.unlinkSync(wavFilePath);
       // fs.unlinkSync(vttFilePath);
+      console.log('unlinking sync');
       fs.unlinkSync(filePath);
       console.log(`Deleted locally saved files`);
 
-      const videoUrl = `https://transcode-genius.s3.ap-south-1.amazonaws.com/media/hls/${fileName}/${fileName}_master.m3u8`;
+      const videoUrl = `https://${configs.BUCKET_NAME}.s3.${configs.AWS_REGION}.amazonaws.com/${fileName}/${fileName}_master.m3u8`;
       // const subtitleUrl = `https://transcode-genius.s3.ap-south-1.amazonaws.com/media/vtt/${fileName}.vtt`
-       const subtitleUrl = `https://transcode-genius.s3.ap-south-1.amazonaws.com/media/vtt/.vtt`
+      //  const subtitleUrl = `https://transcode-genius.s3.ap-south-1.amazonaws.com/media/vtt/.vtt`
     
-      return await this.repository.updateStatus(id, Status.completed, { videoUrl ,subtitleUrl});
+      return await this.repository.updateStatus(id, Status.completed, { videoUrl });
 
     } catch (e: any) {
       await this.repository.updateStatus(id, Status.error, {});

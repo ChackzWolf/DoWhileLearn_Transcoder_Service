@@ -8,11 +8,7 @@ export class TranscodeRepository implements ITranscodeRepository {
     instructorId: string
   ): Promise<Transcoder | any> {
     try {
-      const response = await TranscoderModel.create({
-        fileName,
-        status: Status.transcoding,
-        instructorId,
-      });
+      const response = await TranscoderModel.create({fileName, status: Status.transcoding, instructorId, });
       return response;
     } catch (e: any) {
       //   throw new DBConnectionError()
