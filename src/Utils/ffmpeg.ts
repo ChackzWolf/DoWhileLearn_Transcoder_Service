@@ -10,8 +10,11 @@ import crypto from "crypto";
 ffmpeg.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe");
 // ffmpeg.setFfmpegPath("C:\\ffmpeg\\ffmpeg-master-latest-win64-gpl");
 
-export const FFmpegTranscoder = async (file: any): Promise<any> => {
+export const FFmpegTranscoder = async (file: any, progressCallback:(progress:number, message:string)=>void): Promise<any> => {
   try {
+
+    progressCallback(5, "Starting transcoding...")
+
     const randomName = (bytes = 32) =>
       crypto.randomBytes(bytes).toString("hex");
     const fileName = randomName();
@@ -35,7 +38,8 @@ export const FFmpegTranscoder = async (file: any): Promise<any> => {
         try { 
           const outputDirectoryPath = await transcodeWithFFmpeg(
             fileName,
-            filePath
+            filePath,
+            progressCallback
           );
           console.log(outputDirectoryPath, 'outputDirecotry path')
           resolve({ directoryPath, filePath, fileName, outputDirectoryPath });
@@ -50,7 +54,7 @@ export const FFmpegTranscoder = async (file: any): Promise<any> => {
   }
 };
 
-const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
+const transcodeWithFFmpeg = async (fileName: string, filePath: string, progressCallback:(progress:number, message:string)=>void) => {
   console.log('transcodeWithFFmpeg')
   console.log('fileNamea; ', fileName);
   console.log('filePath', filePath);
@@ -85,7 +89,10 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
 
   const variantPlaylists: { resolution: string; outputFileName: string }[] = [];
   console.log(resolutions)
+  let progress = 10
   for (const { resolution, videoBitrate, audioBitrate } of resolutions) {
+    
+    progressCallback(progress, `Transcoding ${resolution}...` )
     console.log(`HLS conversion starting for ${resolution}`);
     const outputFileName = `${fileName}_${resolution}.m3u8`;
     const segmentFileName = `${fileName}_${resolution}_%03d.ts`;
@@ -131,6 +138,7 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string) => {
       return status;
       // Handle error as per your requirement, e.g., retry, skip, or terminate.
     }
+    progress += 18
   }
   console.log(`HLS master m3u8 playlist generating`);
 

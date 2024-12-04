@@ -28,11 +28,11 @@ export class TranscodeInteractor implements ITranscodeInteractor {
     }
   }
 
-  async transcodeMedia(file: File, id: string) {
+  async transcodeMedia(file: File, id: string, progressCallback: (progress: number, message: string) => void) : Promise<any>{
     try {
       console.log('troancodeMedia')
       console.log('file: ', file, "Id:" , id);
-      const { filePath, fileName, outputDirectoryPath, directoryPath , status} =  await FFmpegTranscoder(file);
+      const { filePath, fileName, outputDirectoryPath, directoryPath , status} =  await FFmpegTranscoder(file,progressCallback);
       if(outputDirectoryPath===false){
         
         const status = 503
@@ -48,15 +48,25 @@ export class TranscodeInteractor implements ITranscodeInteractor {
       // const vttFilePath = `${wavFilePath}.vtt`;
       // console.log(vttFilePath,"--------------------")
       await this.repository.updateStatus(id, Status.finishing, {});
+      progressCallback(70, 'processing...')
 
       const files = fs.readdirSync(outputDirectoryPath);
       console.log('files: ', files, 'files')
+
+
+      const progressADD = 25/files.length
+      console.log(files.length, 'files length');
+      console.log(progressADD, 'progress to add');
+      let currentProgress  = 70
       for (const file of files) {
         console.log(file, 'filename loop started')
         const filePaths = `${outputDirectoryPath}/${file}`;
         const fileStream = fs.createReadStream(filePaths);
 
         console.log(filePath, 'filePath');
+        currentProgress += progressADD
+        progressCallback(currentProgress, 'uploading..')
+        
 
         const params: S3Params = {
           Bucket: process.env.BUCKET_NAME || "",

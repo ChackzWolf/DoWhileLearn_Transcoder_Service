@@ -2,7 +2,7 @@ syntax = "proto3";
 
 
 service TranscoderService {
-  rpc UploadFile(FileUploadRequest) returns (FileUploadResponse);
+  rpc UploadFile(FileUploadRequest) returns (stream TranscodeStatus);
 }
 
 message FileUploadRequest {
@@ -13,4 +13,12 @@ message FileUploadRequest {
 message FileUploadResponse {
   string status = 1;    // Success or failure
   string message = 2;   // Additional information
+}
+
+
+message TranscodeStatus {
+  string status = 1;    // Transcoding, Uploading, Completed, etc.
+  string message = 2;   // Additional info
+  int32 progress = 3;   // Progress percentage (0-100)
+  string videoURL = 4;
 }
