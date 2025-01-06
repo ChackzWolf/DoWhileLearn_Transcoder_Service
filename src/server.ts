@@ -33,19 +33,11 @@ app.use(cors({
   credentials: true
 }));
 
-// app.use("/transcode", TranscoderRoute);
-
-
-// app.post("/convert", async (req, res) => {
-//   // Your video conversion logic here...
-// });
 
 const repository = new TranscodeRepository()
 const interactor = new TranscodeInteractor(repository)
 const controller = new TranscodeController(interactor)
                         
-// TranscoderRoute.post("/",upload.single("file"),controller.transcodeData.bind(controller))
-// TranscoderRoute.get("/videoURL",controller.getData.bind(controller))
 
 const packatgeDefinition = protoLoader.loadSync(
   path.join(__dirname, "/Protos/transcoder.proto"), 

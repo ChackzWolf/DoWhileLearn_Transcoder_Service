@@ -13,8 +13,6 @@ export class TranscodeController {
     }
 
 
-    // instructorData
-    // file
     transcodeData = async (call: grpc.ServerWritableStream<any, any>): Promise<void> => {
         try {
             console.log(call.request, 'reached here')
