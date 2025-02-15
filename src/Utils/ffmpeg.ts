@@ -7,7 +7,8 @@ import crypto from "crypto";
 // ffmpeg.setFfmpegPath("/usr/local/bin/ffmpeg");
 
 // in windows use this commented path . make sure the ffmpeg installed in our system . and also configure path in environment variables
-ffmpeg.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe");
+const ffmpegPath = process.env.FFMPEG_PATH || "/usr/bin/ffmpeg"
+ffmpeg.setFfmpegPath(ffmpegPath);
 // ffmpeg.setFfmpegPath("C:\\ffmpeg\\ffmpeg-master-latest-win64-gpl");
 
 export const FFmpegTranscoder = async (file: any, progressCallback:(progress:number, message:string)=>void): Promise<any> => {
