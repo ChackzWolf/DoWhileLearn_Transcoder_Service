@@ -16,7 +16,7 @@ export const transcriberNode = async (AudiofileName: string): Promise<void> => {
     ];
 
     // Define the directory where your audio files are located
-    const fileInputPath = "C:\\Users\\asifa\\Desktop\\Genius Grid\\Transcode-service\\input\\";
+    const fileInputPath =  process.env.INPUT_DIR || path.join(__dirname, "..", "..", "input");
     
     // Resolve the full path to the audio file
     const filePath = path.resolve(fileInputPath,"2b90e37308c744a6c422a4012e156b68e7264e464b90192a75af832e08cec97f.mp4");
