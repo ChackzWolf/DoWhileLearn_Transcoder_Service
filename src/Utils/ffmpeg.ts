@@ -116,6 +116,10 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string, progressC
             "-hls_time 4",// partition 4 seconds 15 parts
             "-hls_list_size 0",
             "-master_pl_name master.m3u8",
+            `-threads 1`,          // Limit threads
+            `-preset ultrafast`,   // Fastest encoding
+            `-maxrate ${videoBitrate}`, // Constrain bitrate
+            `-bufsize ${parseInt(videoBitrate)/2}`, // Small buffer
           ])// check out
           .output(`${directoryPath}/${outputFileName}`)
           .on("end", (stdout, stderr) => {
