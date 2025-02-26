@@ -104,6 +104,8 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string, progressC
         ffmpeg(filePath)
           .outputOptions([
             `-c:v h264`, // video codec
+            `-preset veryfast`,  // Much faster than default
+            `-tune fastdecode`,  // Optimizes for decoding speed
             `-b:v ${videoBitrate}`, 
             `-c:a aac`, // audio codec
             `-b:a ${audioBitrate}`,
