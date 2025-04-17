@@ -115,7 +115,7 @@ const transcodeWithFFmpeg = async (fileName: string, filePath: string, progressC
             "-profile:v baseline",
             "-level 3.0",
             "-start_number 0",
-            "-hls_time 8",// partition 4 seconds 15 parts
+            "-hls_time 8",// partition 4 seconds 15 parts  ps: changed 4 to 8 to reduces time consumption
             "-hls_list_size 0",
             "-master_pl_name master.m3u8",
             `-threads 1`,          // Limit threads
